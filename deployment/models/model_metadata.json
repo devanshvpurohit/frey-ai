@@ -13,11 +13,11 @@
   "output_name": "output0",
   "output_shape": [
     1,
-    84,
+    34,
     3549
   ],
-  "num_classes": 29,
-  "exported_at": "2026-10-31T15:33:27Z",
+  "num_classes": 30,
+  "exported_at": "2026-10-31T16:50:26Z",
   "target_hardware": {
     "board": "Arduino UNO Q 4GB RAM",
     "processor": "Qualcomm QRB2210 (quad-core ARM Cortex-A53)",

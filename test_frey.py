@@ -45,32 +45,34 @@ class TestFreyAI(unittest.TestCase):
         """Test canonical taxonomy and agronomic safety principles."""
         print("\n[TEST 1] Verifying Taxonomy & Agronomic Safety...")
         # Check class count
-        self.assertEqual(len(PLANTDOC_CLASSES), 29)
+        self.assertEqual(len(PLANTDOC_CLASSES), 30)
 
         # Check lookup by ID
         entry_0 = get_taxonomy_entry(0)
         self.assertIsNotNone(entry_0)
-        self.assertEqual(entry_0["crop"], "Apple")
+        self.assertEqual(entry_0["crop"], "Banana")
         self.assertFalse(entry_0["is_healthy"])
 
-        entry_1 = get_taxonomy_entry(1)
-        self.assertTrue(entry_1["is_healthy"])
+        entry_2 = get_taxonomy_entry(2)
+        self.assertTrue(entry_2["is_healthy"])
 
         # Check lookup by name
-        tomato_early = get_taxonomy_entry("Tomato Early blight leaf")
-        self.assertIsNotNone(tomato_early)
-        self.assertEqual(tomato_early["disease"], "Early Blight")
+        chilli_spot = get_taxonomy_entry("chilli_leafspot")
+        self.assertIsNotNone(chilli_spot)
+        self.assertEqual(chilli_spot["disease"], "Cercospora Leaf Spot")
 
         # Test prediction parsing
-        pred = parse_prediction(class_id=20, confidence=0.88, bbox=[50, 60, 200, 220])
-        self.assertEqual(pred["crop"], "Tomato")
-        self.assertEqual(pred["disease"], "Early Blight")
+        pred = parse_prediction(class_id=13, confidence=0.88, bbox=[50, 60, 200, 220])
+        self.assertEqual(pred["crop"], "Chilli")
+        self.assertEqual(pred["disease"], "Anthracnose (Dieback / Fruit Rot)")
         self.assertIn("Confidence reflects classification probability", pred["severity_disclaimer"])
 
         crops = list_supported_crops()
-        self.assertIn("Tomato", crops)
-        self.assertIn("Potato", crops)
-        self.assertIn("Rice", crops)
+        self.assertIn("Banana", crops)
+        self.assertIn("Chilli", crops)
+        self.assertIn("Cauliflower", crops)
+        self.assertIn("Groundnut", crops)
+        self.assertIn("Radish", crops)
         print("  -> Taxonomy verification PASSED.")
 
     def test_02_inference_engine(self):

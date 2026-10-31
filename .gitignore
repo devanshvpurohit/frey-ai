@@ -23,3 +23,7 @@ ENV/
 
 # Training runs (keep weights/best.pt if desired, ignore bulk runs)
 training/runs/
+training/dataset_mendeley/
+training/yolo11n.pt
+deployment/data/snapshots/*.jpg
+deployment/data/frey.db

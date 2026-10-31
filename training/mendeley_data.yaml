@@ -1,0 +1,38 @@
+# FREY AI - Mendeley Multi-Crop Disease Dataset (DOI: 10.17632/6243z8r6t6.1)
+path: /Users/devanshvpurohit/frey-ai/training/dataset_mendeley
+train: images/train
+val: images/val
+test: images/val
+
+nc: 30
+names:
+  0: 'banana_bract_mosaic_virus'
+  1: 'banana_cordana'
+  2: 'banana_healthy'
+  3: 'banana_insectpest'
+  4: 'banana_moko'
+  5: 'banana_panama'
+  6: 'banana_pestalotiopsis'
+  7: 'banana_sigatoka'
+  8: 'banana_yb_sigatoka'
+  9: 'cauliflower_Blackrot'
+  10: 'cauliflower_bacterial _spot _rot'
+  11: 'cauliflower_downy_mildew'
+  12: 'cauliflower_healthy'
+  13: 'chilli_anthracnose'
+  14: 'chilli_healthy'
+  15: 'chilli_leafcurl'
+  16: 'chilli_leafspot'
+  17: 'chilli_whitefly'
+  18: 'chilli_yellowish'
+  19: 'groundnut_early_leaf_spot'
+  20: 'groundnut_early_rust'
+  21: 'groundnut_healthy'
+  22: 'groundnut_late_leaf_spot'
+  23: 'groundnut_nutrition_deficiency'
+  24: 'groundnut_rust'
+  25: 'radish_black_leaf_spot'
+  26: 'radish_downey_mildew'
+  27: 'radish_flea_beetle'
+  28: 'radish_healthy'
+  29: 'radish_mosaic'
