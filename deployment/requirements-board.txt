@@ -1,0 +1,13 @@
+# FREY AI - Edge Board Python Dependencies
+# Target: Arduino UNO Q (Qualcomm QRB2210 Debian GNU/Linux 13 aarch64)
+#
+# NOTE ON DEBIAN 13 PEP 668:
+# Prefer installing python3-opencv, python3-numpy, and python3-flask via Debian apt:
+#   sudo apt install -y python3-opencv python3-numpy python3-flask
+#
+# The requirements below can be installed inside the isolated virtual environment
+# created by setup_board.sh:
+flask>=2.3.0
+numpy>=1.22.0
+opencv-python-headless>=4.8.0; platform_system!="Linux"
+onnxruntime>=1.16.0; platform_machine=="aarch64" or platform_machine=="x86_64"

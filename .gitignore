@@ -1,0 +1,25 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches and OS files
+.DS_Store
+*.log
+/deployment/frey.log
+*.pid
+/tmp/
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# SQLite WAL & temporary files
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Training runs (keep weights/best.pt if desired, ignore bulk runs)
+training/runs/

@@ -1,0 +1,5 @@
+name: "FREY AI - Multi-Crop Disease Detection"
+description: "Edge-AI plant disease detection running on Arduino UNO Q with YOLO11n, USB camera, and interactive dashboard."
+icon: "🌿"
+ports:
+  - 5000

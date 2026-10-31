@@ -1,0 +1,32 @@
+{
+  "model_name": "frey_yolo11n_416",
+  "architecture": "Ultralytics YOLO11n",
+  "format": "ONNX",
+  "opset": 12,
+  "input_name": "images",
+  "input_shape": [
+    1,
+    3,
+    416,
+    416
+  ],
+  "output_name": "output0",
+  "output_shape": [
+    1,
+    84,
+    3549
+  ],
+  "num_classes": 29,
+  "exported_at": "2026-10-31T15:33:27Z",
+  "target_hardware": {
+    "board": "Arduino UNO Q 4GB RAM",
+    "processor": "Qualcomm QRB2210 (quad-core ARM Cortex-A53)",
+    "os": "Debian GNU/Linux 13 (Trixie)",
+    "execution_provider": "CPUExecutionProvider / OpenCV DNN",
+    "recommended_camera_res": "320x240",
+    "input_resolution": [
+      416,
+      416
+    ]
+  }
+}

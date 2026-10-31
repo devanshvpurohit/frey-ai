@@ -1,0 +1,332 @@
+{
+  "num_classes": 29,
+  "classes": [
+    {
+      "id": 0,
+      "raw_name": "Apple Scab Leaf",
+      "crop": "Apple",
+      "disease": "Apple Scab",
+      "is_healthy": false,
+      "display_name": "Apple \u2014 Scab",
+      "scientific_name": "Venturia inaequalis",
+      "recommendation": "Prune infected shoots, apply copper-based or sulfur fungicides during early budding. Avoid overhead watering."
+    },
+    {
+      "id": 1,
+      "raw_name": "Apple leaf",
+      "crop": "Apple",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Apple \u2014 Healthy Leaf",
+      "scientific_name": "Malus domestica",
+      "recommendation": "Leaf tissue appears normal. Maintain standard orchard monitoring and nutrition."
+    },
+    {
+      "id": 2,
+      "raw_name": "Apple rust leaf",
+      "crop": "Apple",
+      "disease": "Cedar Apple Rust",
+      "is_healthy": false,
+      "display_name": "Apple \u2014 Rust",
+      "scientific_name": "Gymnosporangium juniperi-virginianae",
+      "recommendation": "Apply targeted fungicide at pink-bud stage. Remove nearby eastern red cedar galls within 500m."
+    },
+    {
+      "id": 3,
+      "raw_name": "Bell_pepper leaf",
+      "crop": "Bell Pepper",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Bell Pepper \u2014 Healthy Leaf",
+      "scientific_name": "Capsicum annuum",
+      "recommendation": "Normal foliage. Maintain balanced drip irrigation and balanced NPK fertilizer."
+    },
+    {
+      "id": 4,
+      "raw_name": "Bell_pepper leaf spot",
+      "crop": "Bell Pepper",
+      "disease": "Bacterial Spot",
+      "is_healthy": false,
+      "display_name": "Bell Pepper \u2014 Bacterial Spot",
+      "scientific_name": "Xanthomonas campestris pv. vesicatoria",
+      "recommendation": "Apply copper bactericide + mancozeb. Avoid working among wet foliage. Rotate with non-solanaceous crops."
+    },
+    {
+      "id": 5,
+      "raw_name": "Blueberry leaf",
+      "crop": "Blueberry",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Blueberry \u2014 Healthy Leaf",
+      "scientific_name": "Vaccinium corymbosum",
+      "recommendation": "Canopy is healthy. Maintain acidic soil pH (4.5\u20135.2) and adequate mulch."
+    },
+    {
+      "id": 6,
+      "raw_name": "Cherry leaf",
+      "crop": "Cherry",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Cherry \u2014 Healthy Leaf",
+      "scientific_name": "Prunus avium",
+      "recommendation": "Foliage in good condition. Inspect regularly for powdery mildew or leaf spot symptoms."
+    },
+    {
+      "id": 7,
+      "raw_name": "Corn Gray leaf spot",
+      "crop": "Corn (Maize)",
+      "disease": "Gray Leaf Spot",
+      "is_healthy": false,
+      "display_name": "Corn \u2014 Gray Leaf Spot",
+      "scientific_name": "Cercospora zeae-maydis",
+      "recommendation": "Apply strobilurin or triazole fungicides before VT tasseling stage if disease pressure is high."
+    },
+    {
+      "id": 8,
+      "raw_name": "Corn leaf blight",
+      "crop": "Corn (Maize)",
+      "disease": "Northern Leaf Blight",
+      "is_healthy": false,
+      "display_name": "Corn \u2014 Northern Leaf Blight",
+      "scientific_name": "Exserohilum turcicum",
+      "recommendation": "Use resistant hybrids. Deep tillage to bury residue and timely foliar fungicide spray."
+    },
+    {
+      "id": 9,
+      "raw_name": "Corn rust leaf",
+      "crop": "Corn (Maize)",
+      "disease": "Common Rust",
+      "is_healthy": false,
+      "display_name": "Corn \u2014 Common Rust",
+      "scientific_name": "Puccinia sorghi",
+      "recommendation": "Scout lower canopy. Fungicide applications rarely needed unless severe on susceptible inbreds."
+    },
+    {
+      "id": 10,
+      "raw_name": "grape leaf",
+      "crop": "Grape",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Grape \u2014 Healthy Leaf",
+      "scientific_name": "Vitis vinifera",
+      "recommendation": "Vines appear healthy. Maintain canopy training for airflow and sun penetration."
+    },
+    {
+      "id": 11,
+      "raw_name": "grape leaf black rot",
+      "crop": "Grape",
+      "disease": "Black Rot",
+      "is_healthy": false,
+      "display_name": "Grape \u2014 Black Rot",
+      "scientific_name": "Guignardia bidwellii",
+      "recommendation": "Apply myclobutanil or mancozeb from pre-bloom to 4 weeks post-bloom. Remove mummified berries."
+    },
+    {
+      "id": 12,
+      "raw_name": "Peach leaf",
+      "crop": "Peach",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Peach \u2014 Healthy Leaf",
+      "scientific_name": "Prunus persica",
+      "recommendation": "Foliage clear. Prepare for dormant copper application for peach leaf curl prevention."
+    },
+    {
+      "id": 13,
+      "raw_name": "Potato leaf",
+      "crop": "Potato",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Potato \u2014 Healthy Leaf",
+      "scientific_name": "Solanum tuberosum",
+      "recommendation": "Healthy foliage. Monitor weekly for early and late blight lesions."
+    },
+    {
+      "id": 14,
+      "raw_name": "Potato leaf early blight",
+      "crop": "Potato",
+      "disease": "Early Blight",
+      "is_healthy": false,
+      "display_name": "Potato \u2014 Early Blight",
+      "scientific_name": "Alternaria solani",
+      "recommendation": "Apply protectant fungicides (chlorothalonil/mancozeb). Avoid plant moisture stress and nitrogen deficiency."
+    },
+    {
+      "id": 15,
+      "raw_name": "Potato leaf late blight",
+      "crop": "Potato",
+      "disease": "Late Blight",
+      "is_healthy": false,
+      "display_name": "Potato \u2014 Late Blight",
+      "scientific_name": "Phytophthora infestans",
+      "recommendation": "URGENT: High contagion risk. Apply systemic fungicide (metalaxyl or cymoxanil). Destroy infected cull piles."
+    },
+    {
+      "id": 16,
+      "raw_name": "Raspberry leaf",
+      "crop": "Raspberry",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Raspberry \u2014 Healthy Leaf",
+      "scientific_name": "Rubus idaeus",
+      "recommendation": "Healthy bramble foliage. Prune old fruited floricanes to enhance aeration."
+    },
+    {
+      "id": 17,
+      "raw_name": "Soyabean leaf",
+      "crop": "Soybean",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Soybean \u2014 Healthy Leaf",
+      "scientific_name": "Glycine max",
+      "recommendation": "Crop foliage is vigorous. Scout periodically for frogeye leaf spot and downy mildew."
+    },
+    {
+      "id": 18,
+      "raw_name": "Squash Powdery mildew leaf",
+      "crop": "Squash",
+      "disease": "Powdery Mildew",
+      "is_healthy": false,
+      "display_name": "Squash \u2014 Powdery Mildew",
+      "scientific_name": "Podosphaera xanthii",
+      "recommendation": "Apply potassium bicarbonate, neem oil, or strobilurin. Ensure proper plant spacing for sunlight."
+    },
+    {
+      "id": 19,
+      "raw_name": "Strawberry leaf",
+      "crop": "Strawberry",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Strawberry \u2014 Healthy Leaf",
+      "scientific_name": "Fragaria \u00d7 ananassa",
+      "recommendation": "Healthy runner and crown foliage. Keep fruit off moist soil with clean straw mulch."
+    },
+    {
+      "id": 20,
+      "raw_name": "Tomato Early blight leaf",
+      "crop": "Tomato",
+      "disease": "Early Blight",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Early Blight",
+      "scientific_name": "Alternaria solani",
+      "recommendation": "Prune lower leaves touching soil. Spray copper or mancozeb at first sign of concentric lesions."
+    },
+    {
+      "id": 21,
+      "raw_name": "Tomato Septoria leaf spot",
+      "crop": "Tomato",
+      "disease": "Septoria Leaf Spot",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Septoria Leaf Spot",
+      "scientific_name": "Septoria lycopersici",
+      "recommendation": "Remove affected bottom leaves immediately. Apply chlorothalonil or copper fungicide weekly."
+    },
+    {
+      "id": 22,
+      "raw_name": "Tomato leaf",
+      "crop": "Tomato",
+      "disease": "Healthy",
+      "is_healthy": true,
+      "display_name": "Tomato \u2014 Healthy Leaf",
+      "scientific_name": "Solanum lycopersicum",
+      "recommendation": "Vigorous foliage. Support vines with stakes or cages to maintain distance from ground pathogens."
+    },
+    {
+      "id": 23,
+      "raw_name": "Tomato leaf bacterial spot",
+      "crop": "Tomato",
+      "disease": "Bacterial Spot",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Bacterial Spot",
+      "scientific_name": "Xanthomonas perforans",
+      "recommendation": "Apply copper + mancozeb bactericide tank-mix. Sanitize equipment and avoid handling damp foliage."
+    },
+    {
+      "id": 24,
+      "raw_name": "Tomato leaf late blight",
+      "crop": "Tomato",
+      "disease": "Late Blight",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Late Blight",
+      "scientific_name": "Phytophthora infestans",
+      "recommendation": "CRITICAL: Fast-spreading water mold. Remove heavily infected plants. Apply chlorothalonil, mandipropamid or cymoxanil."
+    },
+    {
+      "id": 25,
+      "raw_name": "Tomato leaf mosaic virus",
+      "crop": "Tomato",
+      "disease": "Mosaic Virus",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Mosaic Virus",
+      "scientific_name": "Tobacco mosaic virus (TMV)",
+      "recommendation": "No chemical cure. Remove and burn infected plants. Disinfect tools with 10% bleach solution. Wash hands after handling tobacco."
+    },
+    {
+      "id": 26,
+      "raw_name": "Tomato leaf yellow virus",
+      "crop": "Tomato",
+      "disease": "Yellow Leaf Curl Virus",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Yellow Leaf Curl",
+      "scientific_name": "TYLCV (transmitted by Bemisia tabaci)",
+      "recommendation": "Control whitefly vector with insecticidal soap or yellow sticky cards. Use reflective silver mulches."
+    },
+    {
+      "id": 27,
+      "raw_name": "Tomato mold leaf",
+      "crop": "Tomato",
+      "disease": "Leaf Mold",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Leaf Mold",
+      "scientific_name": "Passalora fulva",
+      "recommendation": "Reduce greenhouse humidity below 85%. Increase ventilation and apply preventive copper sprays."
+    },
+    {
+      "id": 28,
+      "raw_name": "Tomato two spotted spider mites leaf",
+      "crop": "Tomato",
+      "disease": "Two-Spotted Spider Mite",
+      "is_healthy": false,
+      "display_name": "Tomato \u2014 Spider Mite Damage",
+      "scientific_name": "Tetranychus urticae",
+      "recommendation": "Apply horticultural oil, neem spray, or release predatory mites (Phytoseiulus persimilis)."
+    }
+  ],
+  "names": [
+    "Apple Scab Leaf",
+    "Apple leaf",
+    "Apple rust leaf",
+    "Bell_pepper leaf",
+    "Bell_pepper leaf spot",
+    "Blueberry leaf",
+    "Cherry leaf",
+    "Corn Gray leaf spot",
+    "Corn leaf blight",
+    "Corn rust leaf",
+    "grape leaf",
+    "grape leaf black rot",
+    "Peach leaf",
+    "Potato leaf",
+    "Potato leaf early blight",
+    "Potato leaf late blight",
+    "Raspberry leaf",
+    "Soyabean leaf",
+    "Squash Powdery mildew leaf",
+    "Strawberry leaf",
+    "Tomato Early blight leaf",
+    "Tomato Septoria leaf spot",
+    "Tomato leaf",
+    "Tomato leaf bacterial spot",
+    "Tomato leaf late blight",
+    "Tomato leaf mosaic virus",
+    "Tomato leaf yellow virus",
+    "Tomato mold leaf",
+    "Tomato two spotted spider mites leaf"
+  ],
+  "version": "1.0.0",
+  "target_device": "Qualcomm QRB2210 / Arduino UNO Q",
+  "recommended_input_size": [
+    416,
+    416
+  ]
+}

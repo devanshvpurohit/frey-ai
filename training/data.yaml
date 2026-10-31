@@ -1,0 +1,37 @@
+# FREY AI Plant Disease Detection Dataset Configuration
+path: /Users/devanshvpurohit/frey-ai/training/dataset
+train: images/train
+val: images/val
+test: images/val
+
+nc: 29
+names:
+  0: 'Apple Scab Leaf'
+  1: 'Apple leaf'
+  2: 'Apple rust leaf'
+  3: 'Bell_pepper leaf'
+  4: 'Bell_pepper leaf spot'
+  5: 'Blueberry leaf'
+  6: 'Cherry leaf'
+  7: 'Corn Gray leaf spot'
+  8: 'Corn leaf blight'
+  9: 'Corn rust leaf'
+  10: 'grape leaf'
+  11: 'grape leaf black rot'
+  12: 'Peach leaf'
+  13: 'Potato leaf'
+  14: 'Potato leaf early blight'
+  15: 'Potato leaf late blight'
+  16: 'Raspberry leaf'
+  17: 'Soyabean leaf'
+  18: 'Squash Powdery mildew leaf'
+  19: 'Strawberry leaf'
+  20: 'Tomato Early blight leaf'
+  21: 'Tomato Septoria leaf spot'
+  22: 'Tomato leaf'
+  23: 'Tomato leaf bacterial spot'
+  24: 'Tomato leaf late blight'
+  25: 'Tomato leaf mosaic virus'
+  26: 'Tomato leaf yellow virus'
+  27: 'Tomato mold leaf'
+  28: 'Tomato two spotted spider mites leaf'

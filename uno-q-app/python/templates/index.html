@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FREY AI — Edge Plant Disease Detection | Arduino UNO Q</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="frey-theme">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="frey-navbar">
+    <div class="nav-brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2z"/>
+          <path d="M7 12c2.5-3 6.5-3 9 0"/>
+          <path d="M12 7v10"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">FREY <span class="highlight">AI</span></div>
+        <div class="brand-sub">EDGE MULTI-CROP PATHOLOGY ENGINE</div>
+      </div>
+    </div>
+
+    <div class="nav-hardware-pill">
+      <span class="hw-icon">⚡</span>
+      <span class="hw-text">Arduino UNO Q (4GB) &bull; Qualcomm QRB2210</span>
+      <span class="status-indicator-live" id="global-status-dot"></span>
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn btn-outline" id="btn-snapshot-top">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Snapshot
+      </button>
+      <button class="btn btn-primary" id="btn-toggle-camera">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        <span id="cam-toggle-text">Active</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- AG-DISCLAIMER BANNER -->
+  <div class="safety-banner">
+    <div class="banner-icon">🛡️</div>
+    <div class="banner-text">
+      <strong>Agronomic Integrity Protocol:</strong> Model confidence percentages reflect statistical classifier certainty, <em>never</em> biological disease severity. Absence of bounding boxes indicates unclassified/no canopy in frame—it does not confirm disease-free status.
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD CONTAINER -->
+  <main class="frey-container">
+
+    <!-- SECTION A: OVERVIEW METRICS GRID -->
+    <section class="overview-grid">
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">CAMERA PIPELINE</span>
+          <span class="badge" id="metric-cam-badge">ACTIVE</span>
+        </div>
+        <div class="metric-value" id="metric-cam-res">320 &times; 240</div>
+        <div class="metric-sub" id="metric-cam-device">/dev/video0 (UVC)</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">AI INFERENCE</span>
+          <span class="badge badge-lime" id="metric-model-backend">ONNX</span>
+        </div>
+        <div class="metric-value"><span id="metric-fps">0.0</span> <span class="unit">FPS</span></div>
+        <div class="metric-sub"><span id="metric-latency">0.0</span> ms per frame</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">QUALCOMM SOC LOAD</span>
+          <span class="badge" id="metric-cpu-badge">ARM64</span>
+        </div>
+        <div class="metric-value"><span id="metric-cpu">0.0</span><span class="unit">%</span></div>
+        <div class="metric-sub">Thermal: <span id="metric-temp">--</span> &deg;C</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">RAM ALLOCATION</span>
+          <span class="badge" id="metric-ram-badge">4GB POOL</span>
+        </div>
+        <div class="metric-value"><span id="metric-ram">0.0</span><span class="unit">%</span></div>
+        <div class="metric-sub"><span id="metric-ram-mb">--</span> MB used</div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-header">
+          <span class="metric-label">HISTORICAL DETECTIONS</span>
+          <span class="badge badge-neutral">LOGGED</span>
+        </div>
+        <div class="metric-value" id="metric-total-det">0</div>
+        <div class="metric-sub">Healthy ratio: <span id="metric-healthy-ratio">0.0%</span></div>
+      </div>
+    </section>
+
+    <!-- MAIN TWO-COLUMN CONTENT AREA -->
+    <div class="content-split">
+
+      <!-- LEFT COLUMN: LIVE DETECTION STREAM & CONTROLS -->
+      <div class="col-main">
+        <div class="panel stream-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="live-pulse"></span>
+              Live Camera Stream & Object Detection
+            </div>
+            <div class="stream-toolbar">
+              <button class="tool-btn active" id="btn-overlay-toggle" title="Toggle AI Bounding Boxes">Overlay: ON</button>
+              <button class="tool-btn" id="btn-pause-stream" title="Pause MJPEG Stream">Pause</button>
+              <button class="tool-btn" id="btn-fullscreen" title="Expand View">Fullscreen</button>
+            </div>
+          </div>
+
+          <div class="stream-viewport-container" id="stream-container">
+            <img id="mjpeg-stream" src="/video_feed" alt="FREY AI Live Feed" class="stream-img">
+            <div class="stream-status-overlay" id="stream-overlay-notice" style="display: none;">
+              <span class="spinner"></span> Video feed paused
+            </div>
+          </div>
+
+          <div class="stream-footer">
+            <div class="active-detection-pills" id="live-pills-container">
+              <span class="pill pill-neutral">Scanning camera view...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION C: CROP ANALYSIS & DIAGNOSIS CARD -->
+        <div class="panel diagnosis-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg class="icon icon-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+              Crop Analysis & Pathology Diagnostics
+            </div>
+            <div class="panel-badge-health" id="health-badge-status">SCANNING</div>
+          </div>
+
+          <div class="diagnosis-content">
+            <div class="diagnosis-summary-box">
+              <div class="diag-primary-row">
+                <div>
+                  <div class="diag-crop-name" id="diag-crop-name">No Canopy Identified</div>
+                  <div class="diag-disease-name" id="diag-disease-name">Awaiting foliage detection in field of view</div>
+                </div>
+                <div class="diag-conf-box">
+                  <div class="diag-conf-value" id="diag-conf-value">--%</div>
+                  <div class="diag-conf-label">MODEL CERTAINTY</div>
+                </div>
+              </div>
+
+              <div class="diag-scientific" id="diag-scientific"></div>
+
+              <div class="diag-recommendation-card">
+                <div class="rec-title">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  Recommended Agronomic Action
+                </div>
+                <div class="rec-body" id="diag-recommendation">
+                  Position crop canopy within 30–50 cm of the camera lens under indirect natural illumination.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION D: DETECTION HISTORY LOG -->
+        <div class="panel history-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+              Detection History & Field Records
+            </div>
+            <div class="history-actions">
+              <button class="btn btn-sm btn-outline" id="btn-export-csv">Export CSV</button>
+              <button class="btn btn-sm btn-outline" id="btn-refresh-history">Refresh</button>
+            </div>
+          </div>
+
+          <!-- History Filter Bar -->
+          <div class="filter-bar">
+            <div class="filter-group">
+              <label>Crop Filter:</label>
+              <select id="filter-crop" class="form-select">
+                <option value="all">All Crops (13+)</option>
+                {% for crop in crops %}
+                  <option value="{{ crop }}">{{ crop }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Pathology Status:</label>
+              <select id="filter-status" class="form-select">
+                <option value="all">All Records</option>
+                <option value="diseased">Diseased Only</option>
+                <option value="healthy">Healthy Only</option>
+              </select>
+            </div>
+
+            <div class="filter-group filter-search">
+              <label>Search:</label>
+              <input type="text" id="filter-search-input" placeholder="Search disease or condition..." class="form-input">
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="table-responsive">
+            <table class="frey-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Crop</th>
+                  <th>Condition</th>
+                  <th>Status</th>
+                  <th>Confidence</th>
+                  <th>BBox Coordinates</th>
+                  <th>Snapshot</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <tr>
+                  <td colspan="7" class="text-center text-muted">Loading historical field records...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination-bar">
+            <span class="text-muted text-sm" id="pagination-info">Showing 0 of 0</span>
+            <div class="page-buttons">
+              <button class="btn btn-sm btn-outline" id="btn-prev-page" disabled>Previous</button>
+              <button class="btn btn-sm btn-outline" id="btn-next-page" disabled>Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: MODEL SETTINGS & SYSTEM MONITORING -->
+      <div class="col-side">
+
+        <!-- SECTION E: MODEL & CAMERA SETTINGS -->
+        <div class="panel settings-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Edge AI & Device Settings
+            </div>
+          </div>
+
+          <form id="settings-form" class="settings-form">
+            <div class="form-group">
+              <div class="slider-header">
+                <label for="conf-slider">Confidence Threshold:</label>
+                <span class="slider-val" id="conf-val">30%</span>
+              </div>
+              <input type="range" id="conf-slider" min="0.10" max="0.95" step="0.05" value="{{ settings.conf_threshold or '0.30' }}" class="form-range">
+              <span class="form-help">Lower values detect faint lesions; higher values minimize false detections.</span>
+            </div>
+
+            <div class="form-group">
+              <div class="slider-header">
+                <label for="rate-slider">Inference Rate Limit:</label>
+                <span class="slider-val" id="rate-val">3.0 Hz</span>
+              </div>
+              <input type="range" id="rate-slider" min="1.0" max="8.0" step="0.5" value="{{ settings.inference_rate_hz or '3.0' }}" class="form-range">
+              <span class="form-help">Throttles neural network execution to keep QRB2210 CPU temperature low.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="camera-select">Camera Device Node:</label>
+              <select id="camera-select" class="form-select">
+                <option value="0">/dev/video0 (Default)</option>
+                <option value="1">/dev/video1</option>
+                <option value="2">/dev/video2</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="res-select">Camera Capture Resolution:</label>
+              <select id="res-select" class="form-select">
+                <option value="320x240" selected>320 &times; 240 (Recommended for Stability)</option>
+                <option value="416x416">416 &times; 416 (Direct Model Fit)</option>
+                <option value="640x480">640 &times; 480 (High Detail)</option>
+              </select>
+            </div>
+
+            <div class="form-group form-check">
+              <input type="checkbox" id="auto-save-check" checked class="form-checkbox">
+              <label for="auto-save-check">Auto-persist detections to SQLite</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-save-settings">
+              Apply Settings
+            </button>
+          </form>
+        </div>
+
+        <!-- SECTION F: SYSTEM & EMBEDDED HARDWARE MONITORING -->
+        <div class="panel system-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              Arduino UNO Q Hardware Telemetry
+            </div>
+          </div>
+
+          <div class="telemetry-box">
+            <!-- CPU Load Bar -->
+            <div class="tele-item">
+              <div class="tele-header">
+                <span>Qualcomm CPU Utilization</span>
+                <span class="tele-val" id="tele-cpu-val">--%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar" id="tele-cpu-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- RAM Usage Bar -->
+            <div class="tele-item">
+              <div class="tele-header">
+                <span>System RAM (4GB Total)</span>
+                <span class="tele-val" id="tele-ram-val">--%</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-bar" id="tele-ram-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Detail Specs List -->
+            <ul class="specs-list">
+              <li>
+                <span class="spec-label">Processor</span>
+                <span class="spec-val">Qualcomm QRB2210 ARM64</span>
+              </li>
+              <li>
+                <span class="spec-label">Operating System</span>
+                <span class="spec-val">Debian GNU/Linux 13</span>
+              </li>
+              <li>
+                <span class="spec-label">AI Runtime</span>
+                <span class="spec-val" id="tele-backend-val">ONNX Runtime CPU</span>
+              </li>
+              <li>
+                <span class="spec-label">Camera Interface</span>
+                <span class="spec-val" id="tele-cam-val">V4L2 UVC Driver</span>
+              </li>
+              <li>
+                <span class="spec-label">SoC Temperature</span>
+                <span class="spec-val" id="tele-temp-val">-- &deg;C</span>
+              </li>
+              <li>
+                <span class="spec-label">Camera Reconnects</span>
+                <span class="spec-val" id="tele-reconnects-val">0</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- CROPS QUICK TAXONOMY REFERENCE -->
+        <div class="panel taxonomy-panel">
+          <div class="panel-header">
+            <div class="panel-title">🌿 Supported Crop Species</div>
+          </div>
+          <div class="crop-tags-cloud">
+            <span class="crop-tag">Apple</span>
+            <span class="crop-tag">Bell Pepper</span>
+            <span class="crop-tag">Blueberry</span>
+            <span class="crop-tag">Cherry</span>
+            <span class="crop-tag">Corn / Maize</span>
+            <span class="crop-tag">Grape</span>
+            <span class="crop-tag">Peach</span>
+            <span class="crop-tag">Potato</span>
+            <span class="crop-tag">Raspberry</span>
+            <span class="crop-tag">Soybean</span>
+            <span class="crop-tag">Squash</span>
+            <span class="crop-tag">Strawberry</span>
+            <span class="crop-tag">Tomato</span>
+            <span class="crop-tag ext-tag">+ Rice</span>
+            <span class="crop-tag ext-tag">+ Wheat</span>
+            <span class="crop-tag ext-tag">+ Cotton</span>
+            <span class="crop-tag ext-tag">+ Chilli</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL FOR SNAPSHOT PREVIEW -->
+  <div class="modal-backdrop" id="snapshot-modal" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Inspection Snapshot</div>
+        <button class="modal-close" id="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <img id="modal-img" src="" alt="Snapshot Detail" class="modal-preview-img">
+      </div>
+      <div class="modal-footer">
+        <a id="modal-download-link" href="#" download class="btn btn-primary btn-sm">Download Full Image</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="frey-footer">
+    <div>FREY AI Edge Plant Pathology &bull; Arduino UNO Q 4GB &bull; Debian GNU/Linux 13 &bull; Qualcomm QRB2210</div>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
