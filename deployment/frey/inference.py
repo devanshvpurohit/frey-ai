@@ -32,7 +32,7 @@ class InferenceEngine:
         input_size: Tuple[int, int] = (416, 416),
         conf_threshold: float = 0.25,
         nms_threshold: float = 0.45,
-        num_threads: int = 4,
+        num_threads: int = 2,
     ):
         self.model_path = Path(model_path)
         self.input_size = input_size
@@ -67,7 +67,11 @@ class InferenceEngine:
             import onnxruntime as ort
             options = ort.SessionOptions()
             options.intra_op_num_threads = self.num_threads
+            options.inter_op_num_threads = 1
+            options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
             options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
+            options.enable_mem_pattern = True
+            options.enable_cpu_mem_arena = True
             
             self.session = ort.InferenceSession(
                 str(self.model_path),
@@ -129,17 +133,17 @@ class InferenceEngine:
         return image, r, (dw, dh)
 
     def preprocess(self, frame: np.ndarray) -> Tuple[np.ndarray, float, Tuple[float, float]]:
-        """Prepare raw BGR frame for neural network input."""
+        """Prepare raw BGR frame for neural network input using SIMD C++ blob creation."""
         padded_img, ratio, (pad_w, pad_h) = self.letterbox(frame, self.input_size)
-        
-        # BGR -> RGB
-        rgb = cv2.cvtColor(padded_img, cv2.COLOR_BGR2RGB)
-        
-        # Normalize [0.0, 1.0] and CHW layout
-        blob = rgb.astype(np.float32) / 255.0
-        blob = np.transpose(blob, (2, 0, 1))  # HWC to CHW
-        blob = np.expand_dims(blob, axis=0)    # Add batch dim -> BCHW
-        blob = np.ascontiguousarray(blob)
+        # Fast C++/SIMD implementation for BGR->RGB, normalization, and NCHW memory layout
+        blob = cv2.dnn.blobFromImage(
+            padded_img,
+            scalefactor=1.0 / 255.0,
+            size=self.input_size,
+            mean=(0, 0, 0),
+            swapRB=True,
+            crop=False,
+        )
         return blob, ratio, (pad_w, pad_h)
 
     def postprocess(
@@ -185,6 +189,13 @@ class InferenceEngine:
 
         best_class_ids = np.argmax(filtered_scores, axis=1)
         best_scores = np.max(filtered_scores, axis=1)
+
+        # Cap candidates to top-100 before Python loop to prevent CPU spikes
+        if len(filtered_output) > 100:
+            top_k = np.argsort(best_scores)[::-1][:100]
+            filtered_output = filtered_output[top_k]
+            best_scores = best_scores[top_k]
+            best_class_ids = best_class_ids[top_k]
 
         for i in range(len(filtered_output)):
             cx, cy, w, h = filtered_output[i, :4]
@@ -273,6 +284,14 @@ class InferenceEngine:
             )
 
         return detections, self.last_inference_time_ms
+
+    def set_threads(self, num_threads: int):
+        """Dynamically reconfigure CPU thread allocation."""
+        if num_threads in [1, 2, 4] and num_threads != self.num_threads:
+            logger.info(f"Reconfiguring inference CPU threads: {self.num_threads} -> {num_threads}")
+            self.num_threads = num_threads
+            with self.lock:
+                self._load_model()
 
     def get_status(self) -> Dict[str, Any]:
         """Return engine operational status and performance metrics."""

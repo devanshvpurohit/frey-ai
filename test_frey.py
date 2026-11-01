@@ -216,8 +216,11 @@ class TestFreyAI(unittest.TestCase):
         self.assertEqual(res_sett.status_code, 200)
 
         # POST /api/settings
-        res_upd = client.post("/api/settings", json={"conf_threshold": 0.35})
+        res_upd = client.post("/api/settings", json={"conf_threshold": 0.35, "eco_mode": True, "num_threads": 2})
         self.assertEqual(res_upd.status_code, 200)
+        sett = res_upd.get_json()["settings"]
+        self.assertEqual(sett["eco_mode"], "true")
+        self.assertEqual(sett["num_threads"], "2")
 
         # GET /api/crops
         res_crops = client.get("/api/crops")

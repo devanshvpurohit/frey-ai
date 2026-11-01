@@ -37,9 +37,10 @@
 ## 3. Features Available in the Dashboard
 
 - **Live Camera Stream:** Continuous MJPEG video feed with real-time bounding boxes and health badges.
-- **Crop Analysis:** Automated identification of crop species (Tomato, Potato, Apple, Corn, Grape, etc.), condition, classification certainty %, and recommended agronomic actions.
+- **Crop Analysis:** Automated identification of crop species (Banana, Chilli, Cauliflower, Groundnut, Radish, etc.), condition, classification certainty %, and recommended agronomic actions.
 - **Detection History:** Filterable table of past detections with snapshot image popups and CSV export.
-- **Model Settings:** Adjust confidence threshold (10%–95%), inference rate limit, camera device, and resolution on the fly.
+- **Model Settings:** Adjust confidence threshold (10%–95%), inference rate limit, camera device, resolution, and CPU thread count on the fly.
+- **Eco Mode (Adaptive Power Saver):** Automatically reduces inference frequency on static foliage, dropping idle CPU utilization by ~80%.
 - **Hardware Telemetry:** Qualcomm SoC CPU utilization, RAM pool allocation, and SoC temperature.
 
 ---

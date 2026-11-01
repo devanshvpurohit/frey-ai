@@ -92,11 +92,14 @@ class FreyDatabase:
             "nms_threshold": "0.45",
             "camera_device": "0",
             "camera_res": "320x240",
-            "camera_fps": "30",
-            "inference_rate_hz": "3.0",
+            "camera_fps": "15",
+            "inference_rate_hz": "2.0",
             "auto_save_history": "true",
             "overlay_boxes": "true",
             "overlay_labels": "true",
+            "eco_mode": "true",
+            "num_threads": "2",
+            "jpeg_quality": "65",
         }
         with self._get_connection() as conn:
             for k, v in defaults.items():

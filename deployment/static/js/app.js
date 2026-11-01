@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const rateVal = document.getElementById("rate-val");
   const cameraSelect = document.getElementById("camera-select");
   const resSelect = document.getElementById("res-select");
+  const ecoModeCheck = document.getElementById("eco-mode-check");
+  const threadsSelect = document.getElementById("threads-select");
   const autoSaveCheck = document.getElementById("auto-save-check");
 
   const teleCpuVal = document.getElementById("tele-cpu-val");
@@ -309,6 +311,8 @@ document.addEventListener("DOMContentLoaded", () => {
       inference_rate_hz: parseFloat(rateSlider.value),
       camera_device: cameraSelect.value,
       camera_res: resSelect.value,
+      eco_mode: ecoModeCheck ? ecoModeCheck.checked : true,
+      num_threads: threadsSelect ? parseInt(threadsSelect.value, 10) : 2,
       auto_save_history: autoSaveCheck.checked,
     };
 
@@ -526,7 +530,22 @@ document.addEventListener("DOMContentLoaded", () => {
   pollLiveDetections();
   loadHistory();
 
-  // Polling intervals
-  setInterval(pollStatus, 1500);
-  setInterval(pollLiveDetections, 1000);
+  // Page Visibility API: Throttle polling when tab is hidden to conserve UNO Q CPU
+  let isTabActive = true;
+  document.addEventListener("visibilitychange", () => {
+    isTabActive = !document.hidden;
+    if (isTabActive) {
+      pollStatus();
+      pollLiveDetections();
+    }
+  });
+
+  // Balanced edge telemetry intervals
+  setInterval(() => {
+    if (isTabActive) pollStatus();
+  }, 2000);
+
+  setInterval(() => {
+    if (isTabActive) pollLiveDetections();
+  }, 1500);
 });

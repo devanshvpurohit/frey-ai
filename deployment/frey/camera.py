@@ -92,7 +92,7 @@ class CameraCapture:
         device_id: Any = 0,
         width: int = 320,
         height: int = 240,
-        fps: int = 30,
+        fps: int = 15,
         fourcc: str = "MJPG",
         mock_if_missing: bool = True,
     ):
@@ -240,6 +240,7 @@ class CameraCapture:
                 continue
 
             try:
+                frame_start = time.perf_counter()
                 ret, frame = self.cap.read()
                 if not ret or frame is None:
                     self.consecutive_failures += 1
@@ -256,6 +257,12 @@ class CameraCapture:
                     self.latest_frame = frame
                     self.frame_timestamp = time.time()
                 self._update_fps_metrics()
+
+                # Pace hardware camera acquisition to requested FPS to save CPU
+                elapsed = time.perf_counter() - frame_start
+                target_period = 1.0 / max(1, self.fps)
+                sleep_time = max(0.002, target_period - elapsed)
+                time.sleep(sleep_time)
 
             except Exception as e:
                 logger.error(f"Unexpected error in camera capture loop: {e}")
