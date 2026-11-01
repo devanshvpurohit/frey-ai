@@ -17,7 +17,7 @@
     3549
   ],
   "num_classes": 30,
-  "exported_at": "2026-11-01T13:55:13Z",
+  "exported_at": "2026-11-01T16:38:10Z",
   "target_hardware": {
     "board": "Arduino UNO Q 4GB RAM",
     "processor": "Qualcomm QRB2210 (quad-core ARM Cortex-A53)",

@@ -81,6 +81,7 @@ def train_frey_model(
         save=True,
         save_period=10,
         exist_ok=True,
+        cls=1.0,         # Balanced classification penalty for multi-class separation
         # Augmentations designed for plant canopy images
         hsv_h=0.015,     # subtle leaf color variation
         hsv_s=0.7,       # variable sunlight saturation
